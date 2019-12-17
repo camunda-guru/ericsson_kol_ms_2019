@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    container_name: virtusa-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=virtusacustomerdb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306"
+    restart: always  
+    volumes:
+      - /data:/docker-entrypoint-initdb.d
+  demo-app:
+    image: ldap2019-app
+    build:
+      context: ./
+      dockerfile: dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - 6070:6070
+    volumes:
+      - /data/compose-app
